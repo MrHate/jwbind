@@ -24,7 +24,7 @@ def generateHeader(desc):
         f.write('\t{}(): {}(\"{}\") {{}}\n'.format(
             class_name,
             wrapper_class,
-            '{}.wasm'.format(class_name)))
+            '{}.wasm'.format(class_name))) # FIXME: wasm file locating.
 
     def emitTail(f):
         f.write('};\n')
@@ -85,7 +85,7 @@ def generateBody(desc):
 
             f.write('{} {}({}) {{\n'.format(
                 type_map[method_retype],
-                method_name,
+                '{}::{}'.format(class_name, method_name),
                 unpackParams(method_params)))
             f.write('\tArgVec args;\n')
             for arg in arg_names:
