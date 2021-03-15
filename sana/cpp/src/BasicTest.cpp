@@ -26,7 +26,7 @@ bool operator==(const AttrEntry &lhs, const AttrEntry &rhs) {
 }
 
 int main() {
-  const std::string filepath = "/tmp/basic_test_out";
+  const std::string filepath = "./test.desc";
   std::ofstream fout(filepath, std::ios::out | std::ios::binary);
 
   srand(time(0));
@@ -44,15 +44,15 @@ int main() {
   writer.write(fout);
   fout.close();
 
-  std::ifstream fin(filepath, std::ios::in | std::ios::binary);
-  DescParser parser(fin);
-  const auto &rdesc = parser.GetDescription();
-  assert(rdesc.className == className);
-  for (int i = 0; i < mc; ++i)
-    assert(rdesc.methods.at(i) == methods[i]);
-  for (int i = 0; i < ac; ++i)
-    assert(rdesc.attributes.at(i) == attributes[i]);
-  parser.PrintDesciption(std::cout);
+  // std::ifstream fin(filepath, std::ios::in | std::ios::binary);
+  // DescParser parser(fin);
+  // const auto &rdesc = parser.GetDescription();
+  // assert(rdesc.className == className);
+  // for (int i = 0; i < mc; ++i)
+  //   assert(rdesc.methods.at(i) == methods[i]);
+  // for (int i = 0; i < ac; ++i)
+  //   assert(rdesc.attributes.at(i) == attributes[i]);
+  // parser.PrintDesciption(std::cout);
 
   return 0;
 }

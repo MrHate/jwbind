@@ -22,8 +22,8 @@
 
 namespace jwbind {
 
-using Index = int16_t;
-using Flag = int16_t;
+using Index = int32_t;
+using Flag = int32_t;
 
 enum {
   PUBLIC = 1 << 0,

@@ -5,13 +5,13 @@
 
 namespace {
 union {
-  int16_t i16;
-  char ch[2];
+  int32_t i32;
+  char ch[4];
 } converter;
 
-int16_t read_i16(std::istream &input) {
-  input.read(converter.ch, 2);
-  return converter.i16;
+int32_t read_i32(std::istream &input) {
+  input.read(converter.ch, 4);
+  return converter.i32;
 }
 } // namespace
 
@@ -42,16 +42,16 @@ DescParser::DescParser(std::istream &input) {
   input >> ch;
   assert(ch == 'A');
 
-  desc.className = read_i16(input);
+  desc.className = read_i32(input);
 
-  int16_t attr_count = read_i16(input), method_count = read_i16(input);
+  int32_t attr_count = read_i32(input), method_count = read_i32(input);
 
-  for (int16_t i = 0; i < attr_count; ++i)
+  for (int32_t i = 0; i < attr_count; ++i)
     desc.attributes.push_back(
-        AttrEntry{read_i16(input), read_i16(input), read_i16(input)});
-  for (int16_t i = 0; i < method_count; ++i)
+        AttrEntry{read_i32(input), read_i32(input), read_i32(input)});
+  for (int32_t i = 0; i < method_count; ++i)
     desc.methods.push_back(
-        MethodEntry{read_i16(input), read_i16(input), read_i16(input)});
+        MethodEntry{read_i32(input), read_i32(input), read_i32(input)});
 }
 
 const ClassDesc &DescParser::GetDescription() const { return desc; }
