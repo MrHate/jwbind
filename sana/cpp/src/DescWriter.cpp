@@ -34,11 +34,11 @@ void DescWriter::write(std::ostream &out) const {
   //   write_i32(out, method.func);
   //   write_i32(out, method.flags);
   // }
-  const std::string className("testclass");
+  const std::string className("test");
   write_i32(out, className.size());
 
   write_i32(out, 1);
-  write_i32(out, 1);
+  write_i32(out, 2);
 
   out << className;
 
@@ -46,9 +46,13 @@ void DescWriter::write(std::ostream &out) const {
   write_i32(out, attr.size());
   out << attr;
 
-  const std::string method("add2(I)II");
-  write_i32(out, method.size());
-  out << method;
+  const std::string method1("getn(I)");
+  write_i32(out, method1.size());
+  out << method1;
+
+  const std::string method2("setn(V)I");
+  write_i32(out, method2.size());
+  out << method2;
 }
 
 } // namespace jwbind
