@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-def parseRecord(rec):
+def parse(rec):
     # Description bytes:
     # ---------------------------------------------
     # | MAGIC_WORD(4)      | CLASS_NAME_BYTES(4)  |
@@ -78,4 +78,4 @@ if __name__ == "__main__":
         sys.exit(1)
 
     with open(sys.argv[1], errors="ignore") as desc:
-        print(parseRecord(desc.read()))
+        print(parse(desc.read()))
