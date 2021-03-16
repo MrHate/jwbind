@@ -9,4 +9,14 @@ if [ -z "$PYTHON" ]; then
   exit 1
 fi
 
-exec "$PYTHON" "pytool/$0.py" "$@"
+if [ -z "$@" ]; then
+  echo 'Usage:\n\tjwbind <file>'
+  exit 1
+fi
+
+rm -rf ./java/template/src/*
+cp $@ ./java/template/src
+(cd ./java/template && make)
+cp ./java/template/build/distributions/*.wasm .
+
+# exec "$PYTHON" "pytool/$0.py" "$@"
