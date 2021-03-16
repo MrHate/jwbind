@@ -38,7 +38,7 @@ if (NOT MSVC)
   endif ()
 endif ()
 
-set (WAMR_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR}/../wasm-micro-runtime)
+set (WAMR_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR}/../wamr)
 include (${WAMR_ROOT_DIR}/build-scripts/runtime_lib.cmake)
 
 add_library(vmlib ${WAMR_RUNTIME_LIB_SOURCE})
