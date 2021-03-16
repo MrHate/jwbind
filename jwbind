@@ -19,6 +19,10 @@ JAVA_SRC_DIR=$JAVA_COM_DIR/src
 JAVA_DIST_DIR=$JAVA_COM_DIR/build/distributions
 TARGET_NAME=$(basename "$1" ".java")
 
+if [ ! -d "/path/to/dir" ]; then
+  mkdir -p $JAVA_SRC_DIR
+fi
+
 echo "rootProject.name = '$TARGET_NAME'" > $JAVA_COM_DIR/settings.gradle
 rm -rf $JAVA_SRC_DIR/*
 cp $@ $JAVA_SRC_DIR

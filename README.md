@@ -1,5 +1,19 @@
-# jwbind
+jwbind
+---
 
+## Usage:
+```
+make  # to deploy the toolchain
+./jwbind <file>
+
+```
+
+## Requirements:
+1. latest Gradle tool
+2. JDK 8 or above
+3. CMake and C++ compiler toolchain
+
+## Overview
 ```
  Description bytes:
  ---------------------------------------------
