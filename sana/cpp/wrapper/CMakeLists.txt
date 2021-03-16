@@ -47,7 +47,9 @@ add_library(vmlib ${WAMR_RUNTIME_LIB_SOURCE})
 include_directories(${CMAKE_CURRENT_LIST_DIR}/src)
 include (${SHARED_DIR}/utils/uncommon/shared_uncommon.cmake)
 
-add_executable (main main.cpp test.cpp simple.cpp ${UNCOMMON_SHARED_SOURCE})
+# add_executable (main main.cpp test.cpp simple.cpp ${UNCOMMON_SHARED_SOURCE})
 
-target_link_libraries (main vmlib -lm -ldl -lpthread -lrt)
+# target_link_libraries (main vmlib -lm -ldl -lpthread -lrt)
 
+add_library(HelloWorld HelloWorld.cpp simple.cpp ${UNCOMMON_SHARED_SOURCE})
+target_link_libraries (HelloWorld vmlib -lm -ldl -lpthread -lrt)
