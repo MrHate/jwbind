@@ -9,4 +9,4 @@ if [ -z "$PYTHON" ]; then
   exit 1
 fi
 
-exec "$PYTHON" "$0.py" "$@"
+exec "$PYTHON" "pytool/$0.py" "$@"
