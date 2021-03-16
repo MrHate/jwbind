@@ -38,7 +38,7 @@ if (NOT MSVC)
   endif ()
 endif ()
 
-set (WAMR_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR}/../wamr)
+set (WAMR_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR}/../../cpp/wamr)
 include (${WAMR_ROOT_DIR}/build-scripts/runtime_lib.cmake)
 
 add_library(vmlib ${WAMR_RUNTIME_LIB_SOURCE})
@@ -51,5 +51,3 @@ include (${SHARED_DIR}/utils/uncommon/shared_uncommon.cmake)
 
 # target_link_libraries (main vmlib -lm -ldl -lpthread -lrt)
 
-add_library(HelloWorld HelloWorld.cpp simple.cpp ${UNCOMMON_SHARED_SOURCE})
-target_link_libraries (HelloWorld vmlib -lm -ldl -lpthread -lrt)
