@@ -1,3 +1,6 @@
 [submodule "cpp/wamr"]
 	path = cpp/wamr
 	url = https://github.com/bytecodealliance/wasm-micro-runtime
+[submodule "java/jwasm"]
+	path = java/jwasm
+	url = https://github.com/MrHate/JWebAssembly
