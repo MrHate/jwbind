@@ -1,0 +1,3 @@
+[submodule "cpp/wamr"]
+	path = cpp/wamr
+	url = https://github.com/bytecodealliance/wasm-micro-runtime
