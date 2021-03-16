@@ -3,10 +3,12 @@ apply plugin: 'de.inetsoftware.jwebassembly'
 
 buildscript {
     repositories {
-        maven { url uri('https://jitpack.io') }
+        mavenLocal()
+        // maven { url uri('https://jitpack.io') }
+        flatDir { dir '../jwasm-gradle/build/libs' }
     }
     dependencies {
-        classpath 'com.github.i-net-software:jwebassembly-gradle:master-SNAPSHOT'
+        classpath 'com.github.i-net-software:jwebassembly-gradle:0.3'
     }
 }
 // dependencies {
@@ -14,13 +16,14 @@ buildscript {
 // }
 repositories {
     mavenLocal()
+    flatDir { dir '../jwasm-api/build/libs' }
     // maven {
     //   url uri('../JWebAssembly/build/libs')
     // }
-    maven { url 'https://jitpack.io' }
+    // maven { url 'https://jitpack.io' }
 }
 dependencies {
-    compile 'com.github.i-net-software:jwebassembly-api:master-SNAPSHOT'
+    compile 'com.github.i-net-software:jwebassembly-api:0.3'
 }
 
 sourceSets {

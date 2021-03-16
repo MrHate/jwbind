@@ -4,3 +4,9 @@
 [submodule "java/jwasm"]
 	path = java/jwasm
 	url = https://github.com/MrHate/JWebAssembly
+[submodule "java/jwasm-gradle"]
+	path = java/jwasm-gradle
+	url = https://github.com/i-net-software/JWebAssembly-Gradle
+[submodule "java/jwasm-api"]
+	path = java/jwasm-api
+	url = https://github.com/i-net-software/JWebAssembly-API
