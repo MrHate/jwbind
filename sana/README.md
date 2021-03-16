@@ -25,7 +25,7 @@ Record unified class description into the data segments of WebAssembly modules u
  
  METHOD_ENTRY {
    int32_t length
-   byte[] name ; consists of method name and signature (eg. add2(I)II means "int32_t add2(int32_t, int32_t)")
+   byte[] name ; consists of method name and signature (eg. add2(II)I means "int32_t add2(int32_t, int32_t)")
  }
 
 ```

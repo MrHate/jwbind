@@ -102,14 +102,3 @@ def generateBody(desc):
         emitHeaders(target)
         emitMethods(target)
 
-if __name__ == "__main__":
-
-    import sys
-    from parser import parse
-
-    if len(sys.argv) < 2:
-        print("Argument expected:\n\tpython3 codegen.py <path>")
-        sys.exit(1)
-
-    with open(sys.argv[1], errors="ignore") as desc:
-        codegen(parse(desc.read()))

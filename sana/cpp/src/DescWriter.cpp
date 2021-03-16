@@ -46,11 +46,11 @@ void DescWriter::write(std::ostream &out) const {
   write_i32(out, attr.size());
   out << attr;
 
-  const std::string method1("getn(I)");
+  const std::string method1("getn()I");
   write_i32(out, method1.size());
   out << method1;
 
-  const std::string method2("setn(V)I");
+  const std::string method2("setn(I)V");
   write_i32(out, method2.size());
   out << method2;
 }
