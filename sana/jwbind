@@ -14,9 +14,20 @@ if [ -z "$@" ]; then
   exit 1
 fi
 
-rm -rf ./java/template/src/*
-cp $@ ./java/template/src
-(cd ./java/template && make)
-cp ./java/template/build/distributions/*.wasm .
+JAVA_COM_DIR=java/template
+JAVA_SRC_DIR=$JAVA_COM_DIR/src
+JAVA_DIST_DIR=$JAVA_COM_DIR/build/distributions
+TARGET_NAME=$(basename "$1" ".java")
 
-# exec "$PYTHON" "pytool/$0.py" "$@"
+echo "rootProject.name = '$TARGET_NAME'" > $JAVA_COM_DIR/settings.gradle
+rm -rf $JAVA_SRC_DIR/*
+cp $@ $JAVA_SRC_DIR
+(cd $JAVA_COM_DIR && make)
+if [ $? -ne 0 ]; then
+  echo 'JWebAssembly compilation failed.'
+  exit 1
+fi
+
+cp "$JAVA_DIST_DIR/$TARGET_NAME.wasm" .
+
+exec "$PYTHON" "pytool/$0.py" "$TARGET_NAME.wasm"
