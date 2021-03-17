@@ -6,13 +6,13 @@ download-submmodules:
 	git submodule update --init
 
 build-jwasm: build-jwasm-api build-jwasm-gradle
-	cd java/jwasm && gradle clean publishToMavenLocal
+	cd java/jwasm && gradle publishToMavenLocal
 
 build-jwasm-api:
-	cd java/jwasm-api && gradle clean jar
+	cd java/jwasm-api && gradle jar
 
 build-jwasm-gradle:
-	cd java/jwasm-gradle && gradle clean jar
+	cd java/jwasm-gradle && gradle jar
 
 clean::
 	rm -f *.h *.cpp *.wasm *.a *.so

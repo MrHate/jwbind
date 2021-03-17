@@ -35,5 +35,5 @@ protected:
   void InvokeMethod(const char* func, ArgVec& args, uint32_t result_count);
 
   template <typename T>
-  wasm_val_t WrapArg(T arg);
+  static wasm_val_t WrapArg(T arg);
 };

@@ -33,12 +33,21 @@ def generateHeader(desc):
         pass
 
     def emitMethods(f):
+        has_static_method = False
+
+        def emitStaticInstance(ff):
+            ff.write('\tstatic {}& staticInstance() {{\n'.format(class_name))
+            ff.write('\t\tstatic {} _inst;\n'.format(class_name))
+            ff.write('\t\treturn _inst;\n'.format(class_name))
+            ff.write('\t}\n')
 
         def checkStatic(retype):
             flag = ''
-            if retype[0] == '+':
+            if retype[-1] == '+':
                 flag = 'static '
-            return '{}{}'.format(flag, type_map[retype[-1]])
+                nonlocal has_static_method
+                has_static_method = True
+            return '{}{}'.format(flag, type_map[retype[0]])
         
         def unpackParams(params):
             real_types = []
@@ -52,6 +61,9 @@ def generateHeader(desc):
                 checkStatic(method_retype),
                 method_name,
                 unpackParams(method_params)))
+
+        if has_static_method:
+            emitStaticInstance(f)
 
 
     with open(class_name + '.h', 'w') as target:
@@ -69,6 +81,8 @@ def generateBody(desc):
     def emitMethods(f):
         for ent in methods:
             (method_name, method_retype, method_params) = ent
+            is_static = method_retype[-1] == '+'
+            method_retype = method_retype[0]
             arg_names = []
 
             def unpackParams(params):
@@ -90,7 +104,8 @@ def generateBody(desc):
             f.write('\tArgVec args;\n')
             for arg in arg_names:
                 f.write('\targs.push_back(WrapArg({}));\n'.format(arg))
-            f.write('\tInvokeMethod(\"{}\", args, {});\n'.format(
+            f.write('\t{}InvokeMethod(\"{}\", args, {});\n'.format(
+                'staticInstance().' if is_static else '', 
                 method_name,
                 0 if method_retype == 'V' else 1))
             if method_retype != 'V':
