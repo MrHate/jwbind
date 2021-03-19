@@ -1,11 +1,17 @@
 #!/usr/bin/python3
 
 type_map = {
+        'V' : 'void',
         'I' : 'int32_t',
-        'V' : 'void'
+        'J' : 'int64_t',
+        'F' : 'float',
+        'D' : 'double',
         }
 unpack_map = {
-        'I' : 'i32'
+        'I' : 'i32',
+        'J' : 'i64',
+        'F' : 'f32',
+        'D' : 'f64',
         }
 
 def codegen(desc):
@@ -33,10 +39,11 @@ def generateHeader(desc):
         pass
 
     def emitMethods(f):
+        f.write('\n')
         has_static_method = False
 
         def emitStaticInstance(ff):
-            ff.write('\tstatic {}& staticInstance() {{\n'.format(class_name))
+            ff.write('\n\tstatic {}& staticInstance() {{\n'.format(class_name))
             ff.write('\t\tstatic {} _inst;\n'.format(class_name))
             ff.write('\t\treturn _inst;\n'.format(class_name))
             ff.write('\t}\n')
@@ -44,9 +51,9 @@ def generateHeader(desc):
         def checkStatic(retype):
             flag = ''
             if retype[-1] == '+':
-                flag = 'static '
                 nonlocal has_static_method
                 has_static_method = True
+                flag = 'static '
             return '{}{}'.format(flag, type_map[retype[0]])
         
         def unpackParams(params):

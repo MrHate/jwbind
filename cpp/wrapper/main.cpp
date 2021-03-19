@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include "test.h"
 #include "simple.h"
+#include "test.h"
 
 // class hello: public SimpleWrapper {
 // public:

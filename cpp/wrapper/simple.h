@@ -1,8 +1,8 @@
 #pragma once
 
 #include <cstdint>
-#include <vector>
 #include <string>
+#include <vector>
 
 #include <wasm_c_api.h>
 #include <wasm_export.h>
@@ -29,11 +29,10 @@ public:
   using ArgVec = std::vector<wasm_val_t>;
 
 protected:
-  explicit SimpleWrapper(const std::string&);
+  explicit SimpleWrapper(const std::string &);
   ~SimpleWrapper();
 
-  void InvokeMethod(const char* func, ArgVec& args, uint32_t result_count);
+  void InvokeMethod(const char *func, ArgVec &args, uint32_t result_count);
 
-  template <typename T>
-  static wasm_val_t WrapArg(T arg);
+  template <typename T> static wasm_val_t WrapArg(T arg);
 };
