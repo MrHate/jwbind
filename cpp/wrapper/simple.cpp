@@ -3,6 +3,19 @@
 
 #include "simple.h"
 
+
+// typedef struct wasm_val_t {
+//   wasm_valkind_t kind;
+//   union {
+//     int32_t i32;
+//     int64_t i64;
+//     float f32;
+//     double f64;
+//     struct wasm_ref_t* ref;
+//   } of;
+// } wasm_val_t;
+
+
 uint32_t SimpleWrapper::wrapper_count = 0;
 
 void SimpleWrapper::Init(){
@@ -58,5 +71,29 @@ wasm_val_t SimpleWrapper::WrapArg(int32_t arg) {
   wasm_val_t res;
   res.kind = WASM_I32;
   res.of.i32 = arg;
+  return res;
+}
+
+template <>
+wasm_val_t SimpleWrapper::WrapArg(int64_t arg) {
+  wasm_val_t res;
+  res.kind = WASM_I64;
+  res.of.i64 = arg;
+  return res;
+}
+
+template <>
+wasm_val_t SimpleWrapper::WrapArg(float arg) {
+  wasm_val_t res;
+  res.kind = WASM_F32;
+  res.of.f32 = arg;
+  return res;
+}
+
+template <>
+wasm_val_t SimpleWrapper::WrapArg(double arg) {
+  wasm_val_t res;
+  res.kind = WASM_F64;
+  res.of.f64 = arg;
   return res;
 }
