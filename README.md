@@ -1,25 +1,26 @@
-jwbind
----
+# jwbind
 
 ## Usage:
 ```
-make  # to deploy the toolchain
-./jwbind <file>
+make  # update and deploy the toolchain
 
+./jwbind <file>
 ```
 
 ## Requirements:
-1. latest Gradle tool
+1. Gradle
 2. JDK 8 or above
-3. CMake and C++ compiler toolchain
+3. CMake and GCC/Clang
+4. python3
 
 ## Overview
+Record class description into one custom section of the output wasm module which will be parsed to generate class later.
 ```
  Description bytes:
  ---------------------------------------------
- | MAGIC_WORD(4)      | ATTRIBUTE_COUNT(4)   |
+ | MAGIC_WORD(4)      | ATTRIBUTE_COUNT(1)   |
  ---------------------------------------------
- | METHOD_COUNT(4)    | CLASS_NAME_BYTES(4)  |
+ | METHOD_COUNT(1)    | CLASS_NAME_BYTES(1)  |
  ---------------------------------------------
  | CLASS_NAME ...                            |
  ---------------------------------------------
@@ -29,13 +30,7 @@ make  # to deploy the toolchain
  ---------------------------------------------
  (x) = x bytes
 
- ATTRIBUTE_ENTRY {
-   int32_t length
-   byte[] name ; consists of attribute name and type (eg. In = "int32_t n")
- }
- 
- METHOD_ENTRY {
-   int32_t length
-   byte[] name ; consists of method name and signature (eg. add2(II)I means "int32_t add2(int32_t, int32_t)")
- }
+ ATTRIBUTE_ENTRY: STRING_LENGTH(1) + DESC_STRING(STRING_LENGTH)
+ METHOD_ENTRY: STRING_LENGTH(1) + DESC_STRING(STRING_LENGTH)
+
 ```
