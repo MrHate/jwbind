@@ -15,10 +15,15 @@ build-jwasm-gradle:
 	cd java/jwasm-gradle && gradle jar
 
 build-cpp-tools:
-	cd cpp && mkdir build && cd build && cmake .. && make -j
+	test -d cpp/build || (cd cpp && mkdir build && cd build && cmake .. && make -j)
 
 clean::
 	rm -f *.h *.cpp *.wasm
 	rm -rf .jwbind
 	rm -rf out
 
+test:: deploy
+	./jwbind sample/HelloWorld.java
+	cp sample/Makefile out
+	cp sample/test.cpp out
+	cd out && make -j && ./a.out
