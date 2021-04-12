@@ -8,4 +8,6 @@ import sys
 #      print('Usage:\tjwbind <file>')
 #      sys.exit(1)
 
-codegen(parse(parseWasm(sys.argv[1])))
+raw = parseWasm(sys.argv[1])
+desc = parse(raw)
+codegen(desc)

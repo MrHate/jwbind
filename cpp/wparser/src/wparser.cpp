@@ -1,9 +1,11 @@
 #include <cassert>
 #include <fstream>
 #include <sstream>
+#include <string>
 #include <vector>
 
 #include <binaryen-c.h>
+#include <wasm.h>
 
 namespace {
 BinaryenModuleRef module;
@@ -21,7 +23,18 @@ void readModuleFromBinaryFile(const char *filename) {
   fin.close();
 }
 
-void unfoldFunctions() {}
+void unfoldFunctions() {
+  for (const auto section :
+       reinterpret_cast<wasm::Module *>(module)->userSections)
+    if (section.name == "SaNA") {
+      fprintf(stdout, "SaNA");
+      fwrite(std::string(section.data.begin(), section.data.end()).c_str(),
+             section.data.size(), 1, stdout);
+      fflush(stdout);
+      return;
+    }
+  assert(0);
+}
 
 void displayDebugMessages() { BinaryenModulePrint(module); }
 
@@ -32,9 +45,9 @@ int main(int argc, char **argv) {
   assert(argc >= 2);
 
   readModuleFromBinaryFile(argv[1]);
-  displayDebugMessages();
+  // displayDebugMessages();
   unfoldFunctions();
-  displayDebugMessages();
+  // displayDebugMessages();
   cleanup();
 
   return 0;
