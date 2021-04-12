@@ -60,7 +60,17 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-mv $CPP_BUILD_DIR/lib$TARGET_NAME.a .
+# Move output files into target directory.
+OUTPUT_DIR=out
+WAMR_DIR=cpp/wamr/core/iwasm
 
-# TODO: Copy wamr necessary headers
-# TODO: Add complete sample
+if [ ! -d "$OUTPUT_DIR" ]; then
+  mkdir -p $OUTPUT_DIR
+else
+  rm -rf $OUTPUT_DIR/*
+fi
+
+mv $CPP_BUILD_DIR/lib$TARGET_NAME.a $OUTPUT_DIR
+mv $TARGET_NAME.* $OUTPUT_DIR
+mv $CPP_BUILD_DIR/libvmlib.a $OUTPUT_DIR
+cp $WAMR_DIR/include/* $OUTPUT_DIR
