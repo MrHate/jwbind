@@ -1,6 +1,6 @@
 default: deploy
 
-deploy: download-submmodules build-jwasm
+deploy: download-submmodules build-jwasm build-cpp-tools
 
 download-submmodules:
 	git submodule update --init
@@ -13,6 +13,9 @@ build-jwasm-api:
 
 build-jwasm-gradle:
 	cd java/jwasm-gradle && gradle jar
+
+build-cpp-tools:
+	cd cpp && mkdir build && cd build && cmake .. && make -j
 
 clean::
 	rm -f *.h *.cpp *.wasm *.a *.so
