@@ -44,6 +44,10 @@ mkdir $JWBIND_BUILD_DIR
 cp -r $CPP_TEMPLATE_DIR $CPP_BUILD_DIR
 
 (exec "$PYTHON" "pytool/$0.py" "$TARGET_NAME.wasm")
+if [ $? -ne 0 ]; then
+  echo 'python tools parsing failed.'
+  exit 1
+fi
 
 mv $TARGET_NAME.cpp $CPP_BUILD_DIR
 cp $TARGET_NAME.h $CPP_BUILD_DIR
@@ -51,5 +55,22 @@ cp $TARGET_NAME.h $CPP_BUILD_DIR
 echo "add_library($TARGET_NAME $TARGET_NAME.cpp simple.cpp ${UNCOMMON_SHARED_SOURCE})" >> $CPP_BUILD_DIR/CMakeLists.txt
 echo "target_link_libraries ($TARGET_NAME vmlib -lm -ldl -lpthread -lrt)" >> $CPP_BUILD_DIR/CMakeLists.txt
 (cd $CPP_BUILD_DIR && cmake . && make)
+if [ $? -ne 0 ]; then
+  echo 'cpp template generating failed with cmake.'
+  exit 1
+fi
 
-mv $CPP_BUILD_DIR/lib$TARGET_NAME.a .
+# Move output files into target directory.
+OUTPUT_DIR=out
+WAMR_DIR=cpp/wamr/core/iwasm
+
+if [ ! -d "$OUTPUT_DIR" ]; then
+  mkdir -p $OUTPUT_DIR
+else
+  rm -rf $OUTPUT_DIR/*
+fi
+
+mv $CPP_BUILD_DIR/lib$TARGET_NAME.a $OUTPUT_DIR
+mv $TARGET_NAME.* $OUTPUT_DIR
+mv $CPP_BUILD_DIR/libvmlib.a $OUTPUT_DIR
+cp $WAMR_DIR/include/* $OUTPUT_DIR

@@ -18,6 +18,7 @@ build-cpp-tools:
 	cd cpp && mkdir build && cd build && cmake .. && make -j
 
 clean::
-	rm -f *.h *.cpp *.wasm *.a *.so
+	rm -f *.h *.cpp *.wasm
 	rm -rf .jwbind
+	rm -rf out
 
