@@ -3,3 +3,5 @@ java/template/settings.gradle
 .jwbind
 .vscode
 out
+cpp/build
+pytool/__pycache__
