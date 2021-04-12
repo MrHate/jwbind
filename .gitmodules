@@ -10,3 +10,6 @@
 [submodule "java/jwasm-api"]
 	path = java/jwasm-api
 	url = https://github.com/i-net-software/JWebAssembly-API
+[submodule "cpp/binaryen"]
+	path = cpp/binaryen
+	url = https://github.com/WebAssembly/binaryen

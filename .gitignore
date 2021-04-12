@@ -1,3 +1,4 @@
 java/template/src
 java/template/settings.gradle
 .jwbind
+.vscode
