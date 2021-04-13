@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import os
+
 type_map = {
         'V' : 'void',
         'I' : 'int32_t',
@@ -14,12 +16,13 @@ unpack_map = {
         'D' : 'f64',
         }
 
-def codegen(desc):
-    generateHeader(desc)
-    generateBody(desc)
+def codegen(desc, name):
+    name, _ = os.path.splitext(name)
+    generateHeader(desc, name)
+    generateBody(desc, name)
 
-def generateHeader(desc):
-    (class_name, _, methods) = desc
+def generateHeader(desc, class_name):
+    (_, _, methods) = desc
     wrapper_header = 'simple.h'
     wrapper_class = 'SimpleWrapper'
 
@@ -64,6 +67,8 @@ def generateHeader(desc):
 
         for ent in methods:
             (method_name, method_retype, method_params) = ent
+            if method_name == '<clinit>' or method_name == '<start>':
+                continue
             f.write('\t{} {}({});\n'.format(
                 checkStatic(method_retype),
                 method_name,
@@ -79,8 +84,8 @@ def generateHeader(desc):
         emitMethods(target)
         emitTail(target)
 
-def generateBody(desc):
-    (class_name, _, methods) = desc
+def generateBody(desc, class_name):
+    (_, _, methods) = desc
 
     def emitHeaders(f):
         f.write('#include \"{}\"\n\n'.format(class_name + '.h'))
@@ -88,6 +93,8 @@ def generateBody(desc):
     def emitMethods(f):
         for ent in methods:
             (method_name, method_retype, method_params) = ent
+            if method_name == '<clinit>' or method_name == '<start>':
+                continue
             is_static = method_retype[-1] == '+'
             method_retype = method_retype[0]
             arg_names = []

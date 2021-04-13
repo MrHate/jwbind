@@ -19,13 +19,14 @@ JAVA_SRC_DIR=$JAVA_COM_DIR/src
 JAVA_DIST_DIR=$JAVA_COM_DIR/build/distributions
 TARGET_NAME=$(basename "$1" ".java")
 
-if [ ! -d "/path/to/dir" ]; then
+if [ ! -d "$JAVA_SRC_DIR" ]; then
   mkdir -p $JAVA_SRC_DIR
 fi
 
 echo "rootProject.name = '$TARGET_NAME'" > $JAVA_COM_DIR/settings.gradle
 rm -rf $JAVA_SRC_DIR/*
-cp $@ $JAVA_SRC_DIR
+(exec "$PYTHON" "pytool/jparser.py" $1) > $JAVA_SRC_DIR/$TARGET_NAME.java
+# cp $@ $JAVA_SRC_DIR
 (cd $JAVA_COM_DIR && make)
 if [ $? -ne 0 ]; then
   echo 'JWebAssembly compilation failed.'
@@ -50,7 +51,15 @@ if [ $? -ne 0 ]; then
 fi
 
 mv $TARGET_NAME.cpp $CPP_BUILD_DIR
+if [ $? -ne 0 ]; then
+  echo "cannot find $TARGET_NAME.cpp."
+  exit 1
+fi
 cp $TARGET_NAME.h $CPP_BUILD_DIR
+if [ $? -ne 0 ]; then
+  echo "cannot find $TARGET_NAME.h."
+  exit 1
+fi
 
 echo "add_library($TARGET_NAME $TARGET_NAME.cpp simple.cpp ${UNCOMMON_SHARED_SOURCE})" >> $CPP_BUILD_DIR/CMakeLists.txt
 echo "target_link_libraries ($TARGET_NAME vmlib -lm -ldl -lpthread)" >> $CPP_BUILD_DIR/CMakeLists.txt

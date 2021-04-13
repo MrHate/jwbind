@@ -37,23 +37,22 @@ void unfoldFunctions() {
   assert(0);
 }
 
-void outputBinary(const std::string &filename) {
-  auto mod = reinterpret_cast<wasm::Module *>(module);
-  std::ofstream fout(filename);
-  assert(fout.good());
-  wasm::BufferWithRandomAccess buffer;
-  wasm::WasmBinaryWriter writer(mod, buffer);
-  writer.write();
-  char buff[buffer.size()];
-  std::copy_n(buffer.begin(), buffer.size(), buff);
-  // std::cout << buffer.size();
-  fout.write(buff, buffer.size());
-  fout.close();
-}
+// void outputBinary(const std::string &filename) {
+//   auto mod = reinterpret_cast<wasm::Module *>(module);
+//   std::ofstream fout(filename);
+//   assert(fout.good());
+//   wasm::BufferWithRandomAccess buffer;
+//   wasm::WasmBinaryWriter writer(mod, buffer);
+//   writer.write();
+//   char buff[buffer.size()];
+//   std::copy_n(buffer.begin(), buffer.size(), buff);
+//   fout.write(buff, buffer.size());
+//   fout.close();
+// }
 
 // As WAMR cannot correctly work with externref presently,
 // replace all externref type into i32 here.
-void replaceExternref(const std::string &filename) {
+// void replaceExternref(const std::string &filename) {
   // auto mod = reinterpret_cast<wasm::Module *>(module);
   // mod->userSections.resize(0);
   // for(auto &table : mod->tables)
@@ -64,8 +63,8 @@ void replaceExternref(const std::string &filename) {
   //     if(*i == wasm::Type::externref)
   //       *const_cast<wasm::Type*>(&(*i)) = wasm::Type::i32;
   // }
-  outputBinary(filename);
-}
+  // outputBinary(filename);
+// }
 
 void displayDebugMessages() { BinaryenModulePrint(module); }
 
