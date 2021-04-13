@@ -12,4 +12,4 @@ import sys
 
 raw = parseWasm(sys.argv[1])
 desc = parse(raw)
-codegen(desc)
+codegen(desc, sys.argv[1])

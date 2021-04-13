@@ -22,7 +22,7 @@ clean::
 	rm -rf .jwbind
 	rm -rf out
 
-test:: deploy
+test:: clean deploy
 	./jwbind sample/HelloWorld.java
 	cp sample/Makefile out
 	cp sample/test.cpp out
