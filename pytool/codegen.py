@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+# codegen.py generate target cpp header and source file according
+# to given class description.
+
 import os
 
 type_map = {
@@ -33,7 +36,7 @@ def generateHeader(desc, class_name):
         f.write('\t{}(): {}(\"{}\") {{}}\n'.format(
             class_name,
             wrapper_class,
-            '{}.wasm'.format(class_name))) # FIXME: wasm file locating.
+            '{}.wasm'.format(class_name)))
 
     def emitTail(f):
         f.write('};\n')

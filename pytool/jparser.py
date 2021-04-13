@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+# jparser.py parses java source code at the first pass to add necessary annotation
+# and static marks.
+
 import sys
 
 with open(sys.argv[1], 'r') as target:
