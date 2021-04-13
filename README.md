@@ -3,6 +3,7 @@
 ## Usage:
 ```
 make  # update and deploy the toolchain
+make test
 ./jwbind <file>
 ```
 
