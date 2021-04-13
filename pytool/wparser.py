@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+# wparser.py extract the class description data from Wasm
+# module by cpp-wparser.
+
 def parseWasm(name):
     import subprocess
     result = subprocess.run(['./cpp/build/out/wparser', name], stdout=subprocess.PIPE)

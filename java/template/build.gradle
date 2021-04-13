@@ -23,7 +23,7 @@ repositories {
     // maven { url 'https://jitpack.io' }
 }
 dependencies {
-    compile 'com.github.i-net-software:jwebassembly-api:0.3'
+    compile 'com.github.i-net-software:jwebassembly-api:0.4'
 }
 
 sourceSets {

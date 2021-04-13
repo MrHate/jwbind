@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+# parser.py parses the class description data into in-memory
+# representation.
+
 def parse(rec):
 
     def readInt32(arr):

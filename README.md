@@ -1,10 +1,13 @@
 # jwbind
 
+![arch](http://assets.processon.com/chart_image/604c741763768958e99a04cf.png)
+
 ## Usage:
 ```
-make  # update and deploy the toolchain
-make test
-./jwbind <file>
+make  # deploy the toolchain
+make test # run tests
+
+./jwbind <filepath>
 ```
 
 ## Requirements:
