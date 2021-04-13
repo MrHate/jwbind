@@ -41,7 +41,7 @@ The back-end part parses the Wasm module with binaryen to extract the class desc
 ### Client view
 ![client-view](http://assets.processon.com/chart_image/5ffed9cfe401fd661a3d2542.png)
 
-One of the jwbind output files is the class header. As shown below, it hides as much as possible implementation details behind the wrapper. Run `make test && cd out,` and you'll find it.
+One of the jwbind output files is the class header. As shown below, it hides as much as possible implementation details behind the wrapper. Run `make test && cd out`, and you'll find it.
 
 ```c++
 #include "simple.h"
