@@ -6,6 +6,7 @@
 
 #include <binaryen-c.h>
 #include <wasm.h>
+#include <wasm-binary.h>
 
 namespace {
 BinaryenModuleRef module;
@@ -36,6 +37,36 @@ void unfoldFunctions() {
   assert(0);
 }
 
+void outputBinary(const std::string &filename) {
+  auto mod = reinterpret_cast<wasm::Module *>(module);
+  std::ofstream fout(filename);
+  assert(fout.good());
+  wasm::BufferWithRandomAccess buffer;
+  wasm::WasmBinaryWriter writer(mod, buffer);
+  writer.write();
+  char buff[buffer.size()];
+  std::copy_n(buffer.begin(), buffer.size(), buff);
+  // std::cout << buffer.size();
+  fout.write(buff, buffer.size());
+  fout.close();
+}
+
+// As WAMR cannot correctly work with externref presently,
+// replace all externref type into i32 here.
+void replaceExternref(const std::string &filename) {
+  // auto mod = reinterpret_cast<wasm::Module *>(module);
+  // mod->userSections.resize(0);
+  // for(auto &table : mod->tables)
+  //   table->type = wasm::Type::funcref;
+  // for(auto &func : mod->functions) {
+  //   std::initializer_list<wasm::Type> types;
+  //   for(auto i = func->sig.params.begin(); i != func->sig.params.end(); ++i)
+  //     if(*i == wasm::Type::externref)
+  //       *const_cast<wasm::Type*>(&(*i)) = wasm::Type::i32;
+  // }
+  outputBinary(filename);
+}
+
 void displayDebugMessages() { BinaryenModulePrint(module); }
 
 void cleanup() { BinaryenModuleDispose(module); }
@@ -47,6 +78,7 @@ int main(int argc, char **argv) {
   readModuleFromBinaryFile(argv[1]);
   // displayDebugMessages();
   unfoldFunctions();
+  // replaceExternref(std::string(argv[1]) + std::string(".bak"));
   // displayDebugMessages();
   cleanup();
 
