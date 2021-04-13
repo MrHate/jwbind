@@ -5,7 +5,7 @@ import sys
 with open(sys.argv[1], 'r') as target:
     target = target.read()
 
-within_class = target[target.find('class'):].replace('private', 'private static').replace('public', '@Export public static').replace('static static', '')
+within_class = target[target.find('class'):].replace('private', 'private static').replace('public', '@Export public static').replace('static static', 'static')
 
 
 

@@ -2,7 +2,7 @@ public class HelloWorld {
 
     private int n = 18;
 
-    public int add2(int a, int b) {
+    public static int add2(int a, int b) {
       return a+ b;
     }
 
