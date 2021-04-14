@@ -10,10 +10,7 @@
 
 class SimpleWrapper {
 
-  // const std::string mod_name;
-
   char error_buf[128];
-  // wasm_module_t module;
   wasm_module_inst_t module_inst;
   wasm_function_inst_t func;
   wasm_exec_env_t exec_env;
@@ -22,8 +19,9 @@ class SimpleWrapper {
   // Privide a func cache to reduce frequent function looking up on same functions.
   std::unordered_map<const void*, wasm_function_inst_t> func_cache;
 
-  static uint32_t wrapper_count;
 
+  // Reference count for WAMR init/deinit.
+  static uint32_t wrapper_count;
   // Increase reference count for WAMR to init.
   static void Init();
   // Decrease reference count for WAMR to deinit.
@@ -43,7 +41,8 @@ protected:
   explicit SimpleWrapper(const std::string &);
   ~SimpleWrapper();
 
+  // Derived classes call func by.
   void InvokeMethod(const char *func, ArgVec &args, uint32_t result_count);
-
+  // Wrap args for WAMR func-calling interface.
   template <typename T> static wasm_val_t WrapArg(T arg);
 };
