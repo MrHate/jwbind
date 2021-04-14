@@ -10,10 +10,10 @@
 
 class SimpleWrapper {
 
-  const std::string mod_name;
+  // const std::string mod_name;
 
   char error_buf[128];
-  wasm_module_t module;
+  // wasm_module_t module;
   wasm_module_inst_t module_inst;
   wasm_function_inst_t func;
   wasm_exec_env_t exec_env;
@@ -24,7 +24,9 @@ class SimpleWrapper {
 
   static uint32_t wrapper_count;
 
+  // Increase reference count for WAMR to init.
   static void Init();
+  // Decrease reference count for WAMR to deinit.
   static void Deinit();
 
   // Instantiate a Wasm module with given name under the participation of module

@@ -29,7 +29,7 @@ void SimpleWrapper::Deinit() {
 }
 
 SimpleWrapper::SimpleWrapper(const std::string &name)
-    : mod_name(name), stack_size(8092), heap_size(8092) {
+    : stack_size(8092), heap_size(8092) {
   module_inst = InstantiateWasmModule(name, stack_size, heap_size, error_buf);
   exec_env = wasm_runtime_create_exec_env(module_inst, stack_size);
 }
