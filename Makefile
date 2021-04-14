@@ -1,5 +1,8 @@
 default: deploy
 
+
+# ================ build and deploy ====================
+
 deploy: download-submmodules build-jwasm build-cpp-tools
 
 download-submmodules:
@@ -14,8 +17,13 @@ build-jwasm-api:
 build-jwasm-gradle:
 	cd java/jwasm-gradle && gradle jar
 
+# Manually delete cpp/build to have the makefile rebuilt cpp tools.
+# TODO: Save the time building unnecessary binaryen targets.
 build-cpp-tools:
 	test -d cpp/build || (cd cpp && mkdir build && cd build && cmake .. && make -j)
+
+
+# ================ utility tasks ====================
 
 clean::
 	rm -f *.h *.cpp *.wasm
@@ -28,5 +36,5 @@ test:: clean deploy
 	cp sample/test.cpp out
 	cd out && make -j && ./a.out
 
-benchmark:: deploy
+benchmark:: test
 	./cpp/build/out/jwbind-benchmark
