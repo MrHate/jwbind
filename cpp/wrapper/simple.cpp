@@ -56,13 +56,13 @@ SimpleWrapper::~SimpleWrapper() {
 void SimpleWrapper::InvokeMethod(const char *func_name, SimpleWrapper::ArgVec &args,
                                  uint32_t result_count) {
   // Check function cache first.
-  // auto it = func_cache.find(func_name);
-  // while (it == func_cache.end()) {
-  //   func_cache[func_name] = wasm_runtime_lookup_function(module_inst, func_name, NULL);
-  //   it = func_cache.find(func_name);
-  // }
-  // auto func_inst = it->second;
-  auto func_inst = wasm_runtime_lookup_function(module_inst, func_name, NULL);
+  auto it = func_cache.find(func_name);
+  while (it == func_cache.end()) {
+    func_cache[func_name] = wasm_runtime_lookup_function(module_inst, func_name, NULL);
+    it = func_cache.find(func_name);
+  }
+  auto func_inst = it->second;
+  // auto func_inst = wasm_runtime_lookup_function(module_inst, func_name, NULL);
 
   // Call through WAMR and process results.
   wasm_val_t results[result_count];

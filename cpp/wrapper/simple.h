@@ -20,7 +20,7 @@ class SimpleWrapper {
   uint32_t stack_size, heap_size;
 
   // Privide a func cache to reduce frequent function looking up on same functions.
-  // std::unordered_map<const void*, wasm_function_inst_t> func_cache;
+  std::unordered_map<const void*, wasm_function_inst_t> func_cache;
 
   static uint32_t wrapper_count;
 
