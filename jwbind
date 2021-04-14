@@ -65,7 +65,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "add_library($TARGET_NAME $TARGET_NAME.cpp simple.cpp ${UNCOMMON_SHARED_SOURCE})" >> $CPP_BUILD_DIR/CMakeLists.txt
-echo "target_link_libraries ($TARGET_NAME vmlib -lm -ldl -lpthread)" >> $CPP_BUILD_DIR/CMakeLists.txt
+echo "target_link_libraries ($TARGET_NAME vmlib -lpthread)" >> $CPP_BUILD_DIR/CMakeLists.txt
 (cd $CPP_BUILD_DIR && cmake . && make)
 if [ $? -ne 0 ]; then
   echo 'cpp template generating failed with cmake.'
