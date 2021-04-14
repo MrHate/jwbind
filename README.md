@@ -66,3 +66,7 @@ public:
 };
 ```
 
+### Benchmark
+
+Although jwbind wrapper classes suffer terrible performance, there is still a benchmark analysis and optimization inspiration [here](./cpp/benchmark/README.md).
+
