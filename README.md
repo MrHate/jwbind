@@ -30,7 +30,7 @@ make test       # run tests
 
 ### Transpilation workflow
 
-![arch](http://assets.processon.com/chart_image/6075773af346fb647a4c38f7.png)
+![arch](http://assets.processon.com/chart_image/6076775d0791293688822148.png)
 
 The jwbind toolchain consists of a front-end and a back-end. 
 
