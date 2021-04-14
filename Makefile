@@ -27,3 +27,6 @@ test:: clean deploy
 	cp sample/Makefile out
 	cp sample/test.cpp out
 	cd out && make -j && ./a.out
+
+benchmark:: deploy
+	./cpp/build/out/jwbind-benchmark
