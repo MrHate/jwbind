@@ -1,5 +1,7 @@
 #include <cassert>
+// #include <iostream>
 #include <fstream>
+#include <memory>
 
 #include "simple.h"
 
@@ -28,29 +30,51 @@ void SimpleWrapper::Deinit() {
 
 SimpleWrapper::SimpleWrapper(const std::string &name)
     : mod_name(name), stack_size(8092), heap_size(8092) {
-  Init();
-
-  std::ifstream fin(name);
-  assert(fin.good());
-
-  std::string buffer;
-  char ch;
-  while (fin.get(ch))
-    buffer.push_back(ch);
-  module = wasm_runtime_load(reinterpret_cast<const uint8_t *>(buffer.c_str()),
-                             buffer.size(), error_buf, sizeof(error_buf));
-  assert(module);
-  module_inst = wasm_runtime_instantiate(module, stack_size, heap_size,
-                                         error_buf, sizeof(error_buf));
+  module_inst = InstantiateWasmModule(name, stack_size, heap_size, error_buf);
   exec_env = wasm_runtime_create_exec_env(module_inst, stack_size);
 }
 
 SimpleWrapper::~SimpleWrapper() {
   wasm_runtime_destroy_exec_env(exec_env);
   wasm_runtime_deinstantiate(module_inst);
-  wasm_runtime_unload(module);
+}
 
-  Deinit();
+using wasm_module_sp = std::shared_ptr<WASMModuleCommon>;
+
+wasm_module_inst_t SimpleWrapper::InstantiateWasmModule(const std::string &name,
+                                                        uint32_t stack_size,
+                                                        uint32_t heap_size,
+                                                        char *error_buf) {
+  static std::unordered_map<std::string, wasm_module_sp> module_cache;
+  // std::cout << "Init module: " << name << std::endl;
+
+  auto it = module_cache.find(name);
+  while (it == module_cache.end()) {
+    // std::cout << "Load module: " << name << std::endl;
+    Init();
+
+    std::ifstream fin(name);
+    assert(fin.good());
+
+    std::string buffer;
+    char ch;
+    while (fin.get(ch))
+      buffer.push_back(ch);
+    auto module =
+        wasm_runtime_load(reinterpret_cast<const uint8_t *>(buffer.c_str()),
+                          buffer.size(), error_buf, sizeof(error_buf));
+    assert(module);
+
+    module_cache[name] = wasm_module_sp(module, [](wasm_module_t p) {
+      wasm_runtime_unload(p);
+      Deinit();
+    });
+
+    it = module_cache.find(name);
+  }
+  auto pm = it->second;
+  return wasm_runtime_instantiate(pm.get(), stack_size, heap_size, error_buf,
+                                  sizeof(error_buf));
 }
 
 void SimpleWrapper::InvokeMethod(const char *func_name, SimpleWrapper::ArgVec &args,

@@ -27,6 +27,13 @@ class SimpleWrapper {
   static void Init();
   static void Deinit();
 
+  // Instantiate a Wasm module with given name under the participation of module
+  // cache.
+  static wasm_module_inst_t InstantiateWasmModule(const std::string &name,
+                                                  uint32_t stack_size,
+                                                  uint32_t heap_size,
+                                                  char *error_buf);
+
 public:
   using ArgVec = std::vector<wasm_val_t>;
 

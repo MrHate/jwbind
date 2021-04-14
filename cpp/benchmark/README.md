@@ -66,3 +66,40 @@ NonStaticI64Add2          29454 ns        29391 ns        22534
 NonStaticI32Set           28993 ns        28918 ns        23576
 NonStaticI32Get           29288 ns        29231 ns        23564
 ```
+
+### Phase 2: Hashmap Wasm binary cache
+
+As each wrapper object invoke a complete process reading Wasm binary with file I/O during instantiation, providing a binary cache shall considerably improve the WrapperCreation score.
+
+```
+Run on (16 X 2100 MHz CPU s)
+CPU Caches:
+  L1 Data 32 KiB (x16)
+  L1 Instruction 32 KiB (x16)
+  L2 Unified 4096 KiB (x16)
+  L3 Unified 16384 KiB (x16)
+Load Average: 1.56, 0.63, 0.34
+---------------------------------------------------------------
+Benchmark                     Time             CPU   Iterations
+---------------------------------------------------------------
+RefCreation               0.000 ns        0.000 ns   1000000000
+StaticI32Add2_Ref          1.38 ns         1.38 ns    457208576
+NonStaticI32Add3_Ref       1.75 ns         1.75 ns    407099669
+NonStaticF32Add2_Ref       1.73 ns         1.72 ns    398471944
+NonStaticF64Add2_Ref       1.72 ns         1.72 ns    401396295
+NonStaticI64Add2_Ref       1.68 ns         1.68 ns    416515055
+NonStaticI32Set_Ref        1.68 ns         1.68 ns    415327594
+NonStaticI32Get_Ref        1.70 ns         1.70 ns    416379682
+WrapperCreation           31660 ns        31575 ns        20320
+StaticI32Add2             30304 ns        30219 ns        22586
+NonStaticI32Add3          30746 ns        30662 ns        21826
+NonStaticF32Add2          30275 ns        30189 ns        22022
+NonStaticF64Add2          29970 ns        29875 ns        22368
+NonStaticI64Add2          31228 ns        31140 ns        21910
+NonStaticI32Set           30251 ns        30165 ns        23339
+NonStaticI32Get           31564 ns        31479 ns        23526
+```
+
+### Phase 3: Eliminate duplicated wasm_val_t during arg wrapping
+
+Each arg wrapper function triggers two struct allocation and one unnecessary copy.
