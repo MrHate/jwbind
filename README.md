@@ -9,6 +9,7 @@ Note that jwbind aims to explore the capability to make the wrapper classes act 
 ```
 make            # deploy the toolchain
 make test       # run tests
+make benchmakr	# run benchmark
 
 ./jwbind <filepath>
 ```
@@ -34,7 +35,7 @@ make test       # run tests
 
 The jwbind toolchain consists of a front-end and a back-end. 
 
-The front-end part modifies the Java source file with python tools` at first as the preprocessing stage to have the source file meet the requirements of JWebAssembly. It then compiles Java source code into Java bytecode by any javac tool. Afterward, it parses the Java bytecode into Wasm binary and necessary jwbind class description data within a custom section by [customized JWebAsssembly](https://github.com/MrHate/JWebAssembly).
+The front-end part modifies the Java source file with python tools at first as the preprocessing stage to have the source file meet the requirements of JWebAssembly. It then compiles Java source code into Java bytecode by any javac tool. Afterward, it parses the Java bytecode into Wasm binary and necessary jwbind class description data within a custom section by [customized JWebAsssembly](https://github.com/MrHate/JWebAssembly).
 
 The back-end part parses the Wasm module with binaryen to extract the class description data. Finally, the jwbind python tools would generate target wrapper source files and build the target archive/library file with the WAMR library altogether.
 

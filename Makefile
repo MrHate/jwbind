@@ -37,4 +37,5 @@ test:: clean deploy
 	cd out && make -j && ./a.out
 
 benchmark:: test
-	./cpp/build/out/jwbind-benchmark
+	cd cpp/benchmark && mkdir build && cd build && cmake .. && make -j
+	./cpp/benchmark/build/jwbind-benchmark 

@@ -13,6 +13,6 @@
 [submodule "cpp/binaryen"]
 	path = cpp/binaryen
 	url = https://github.com/WebAssembly/binaryen
-[submodule "cpp/gbenchmark"]
-	path = cpp/gbenchmark
+[submodule "cpp/benchmark/googlebenchmark"]
+	path = cpp/benchmark/googlebenchmark
 	url = https://github.com/google/benchmark
