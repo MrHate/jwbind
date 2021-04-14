@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <unordered_map>
 #include <string>
 #include <vector>
 
@@ -18,7 +19,8 @@ class SimpleWrapper {
   wasm_exec_env_t exec_env;
   uint32_t stack_size, heap_size;
 
-  // std::map<string, func_inst_t> func_cache;
+  // Privide a func cache to reduce frequent function looking up on same functions.
+  // std::unordered_map<const void*, wasm_function_inst_t> func_cache;
 
   static uint32_t wrapper_count;
 
