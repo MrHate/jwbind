@@ -2,7 +2,7 @@
 
 Note that the cases named with "ref" are reference cases running equivalent methods written directly in C++.
 
-### Phase 1: No optimiation
+### Phase 0: No optimiation
 
 ```
 Run on (16 X 2100 MHz CPU s)
@@ -33,7 +33,7 @@ NonStaticI32Set           28594 ns        28470 ns        24626
 NonStaticI32Get           28361 ns        28309 ns        24807
 ```
 
-### Phase 2: hash-map function cache
+### Phase 1: Hashmap function cache
 
 WAMR looks up functions by traversing a list that features a linear seeking time O(n).
 As Wrappers pass the same pointers to WAMR to look up for the same functions, using hashmaps to cache function handles provides a hopefully O(1) seeking time, along with, however, more extended construction and destruction time.

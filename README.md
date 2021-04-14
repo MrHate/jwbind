@@ -25,7 +25,7 @@ make benchmark	# run benchmark
 
 * JWebAssembly
 * Wasm-micro-runtime
-* binaryen
+* Binaryen
 
 ## Overview
 
