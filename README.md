@@ -9,7 +9,7 @@ Note that jwbind aims to explore the capability to make the wrapper classes act 
 ```
 make            # deploy the toolchain
 make test       # run tests
-make benchmakr	# run benchmark
+make benchmark	# run benchmark
 
 ./jwbind <filepath>
 ```
