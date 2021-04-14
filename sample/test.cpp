@@ -15,7 +15,7 @@
 
 int main() {
     HelloWorld hello;
-    printf("\n\nstart testing...\n");
+    printf("\n\n[jwbind basic tests]\tstart testing...\n");
     srand(time(0));
 
     for(int32_t i = 0; i < ITER_NUM; ++i) {
@@ -55,7 +55,7 @@ int main() {
         ASSERT_EQUAL(hello.getn(), a);
     }
 
-    printf("all tests passed.\n");
+    printf("[jwbind basic tests]\tall tests passed.\n");
     
     return 0;
 }

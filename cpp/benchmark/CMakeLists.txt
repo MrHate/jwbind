@@ -7,5 +7,9 @@ set(CMAKE_BUILD_TYPE Release)
 
 add_subdirectory(googlebenchmark)
 
+find_library(LIB_VMLIB vmlib libvmlib HINTS ${CMAKE_SOURCE_DIR}/out)
+find_library(LIB_HELLO HelloWorld libHelloWorld HINTS ${CMAKE_SOURCE_DIR}/out)
+
 add_executable(jwbind-benchmark src/jbenchmark.cpp)
-target_link_libraries(jwbind-benchmark benchmark::benchmark)
+target_link_libraries(jwbind-benchmark benchmark::benchmark ${LIB_HELLO} ${LIB_VMLIB} -lpthread)
+target_include_directories(jwbind-benchmark PUBLIC ${CMAKE_SOURCE_DIR}/out)
