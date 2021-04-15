@@ -77,8 +77,9 @@ wasm_module_inst_t SimpleWrapper::InstantiateWasmModule(const std::string &name,
                                   sizeof(error_buf));
 }
 
-void SimpleWrapper::InvokeMethod(const char *func_name, SimpleWrapper::ArgVec &args,
-                                 uint32_t result_count) {
+void SimpleWrapper::InvokeMethod(const char *func_name,
+                                 SimpleWrapper::ArgVec &args,
+                                 uint32_t result_count, uint32_t arg_count) {
   // Check function cache first.
   auto it = func_cache.find(func_name);
   while (it == func_cache.end()) {
@@ -91,41 +92,39 @@ void SimpleWrapper::InvokeMethod(const char *func_name, SimpleWrapper::ArgVec &a
   // Call through WAMR and process results.
   wasm_val_t results[result_count];
   if (!wasm_runtime_call_wasm_a(exec_env, func_inst, result_count, results,
-                                args.size(), &args[0]))
+                                arg_count, &args[0]))
     assert(0);
   args.resize(result_count);
   for (uint32_t i = 0; i < result_count; ++i)
     args[i] = results[i];
 }
 
-template <typename T> wasm_val_t SimpleWrapper::WrapArg(T arg) {
-  return wasm_val_t();
-}
+// ======================= Arg wrapping template functions
+// ========================
 
-template <> wasm_val_t SimpleWrapper::WrapArg(int32_t arg) {
-  wasm_val_t res;
+template <typename T>
+void SimpleWrapper::WrapArg(T arg, ArgVec &vec, uint32_t i) {}
+
+template <> void SimpleWrapper::WrapArg(int32_t arg, ArgVec &vec, uint32_t i) {
+  wasm_val_t &res = vec[i];
   res.kind = WASM_I32;
   res.of.i32 = arg;
-  return res;
 }
 
-template <> wasm_val_t SimpleWrapper::WrapArg(int64_t arg) {
-  wasm_val_t res;
+template <> void SimpleWrapper::WrapArg(int64_t arg, ArgVec &vec, uint32_t i) {
+  wasm_val_t &res = vec[i];
   res.kind = WASM_I64;
   res.of.i64 = arg;
-  return res;
 }
 
-template <> wasm_val_t SimpleWrapper::WrapArg(float arg) {
-  wasm_val_t res;
+template <> void SimpleWrapper::WrapArg(float arg, ArgVec &vec, uint32_t i) {
+  wasm_val_t &res = vec[i];
   res.kind = WASM_F32;
   res.of.f32 = arg;
-  return res;
 }
 
-template <> wasm_val_t SimpleWrapper::WrapArg(double arg) {
-  wasm_val_t res;
+template <> void SimpleWrapper::WrapArg(double arg, ArgVec &vec, uint32_t i) {
+  wasm_val_t &res = vec[i];
   res.kind = WASM_F64;
   res.of.f64 = arg;
-  return res;
 }

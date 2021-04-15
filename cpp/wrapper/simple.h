@@ -42,7 +42,8 @@ protected:
   ~SimpleWrapper();
 
   // Derived classes call func by.
-  void InvokeMethod(const char *func, ArgVec &args, uint32_t result_count);
+  void InvokeMethod(const char *func, ArgVec &args, uint32_t result_count,
+                    uint32_t arg_count);
   // Wrap args for WAMR func-calling interface.
-  template <typename T> static wasm_val_t WrapArg(T arg);
+  template <typename T> static void WrapArg(T arg, ArgVec &, uint32_t);
 };

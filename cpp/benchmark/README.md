@@ -69,7 +69,7 @@ NonStaticI32Get           29288 ns        29231 ns        23564
 
 ### Phase 2: Hashmap Wasm binary cache
 
-As each wrapper object invoke a complete process reading Wasm binary with file I/O during instantiation, providing a binary cache shall considerably improve the WrapperCreation score.
+As each wrapper object invokes a complete process from reading Wasm binary with file I/O to module instantiation during construction, providing a binary cache shall considerably improve the WrapperCreation score.
 
 ```
 Run on (16 X 2100 MHz CPU s)
@@ -100,6 +100,36 @@ NonStaticI32Set           30251 ns        30165 ns        23339
 NonStaticI32Get           31564 ns        31479 ns        23526
 ```
 
-### Phase 3: Eliminate duplicated wasm_val_t during arg wrapping
+### Phase 3: Eliminate unnecessary memory allocation during arg wrapping
 
-Each arg wrapper function triggers two struct allocation and one unnecessary copy.
+Each arg wrapper function previously triggers one std::vector construction and n*2 wasm_val_t constructions along with correlated destructions.
+Such stuff could be eliminated by moving arg vector into member-static and adjusting arg value directly on arg vector passing by reference.
+
+```
+Run on (16 X 2100 MHz CPU s)
+CPU Caches:
+  L1 Data 32 KiB (x16)
+  L1 Instruction 32 KiB (x16)
+  L2 Unified 4096 KiB (x16)
+  L3 Unified 16384 KiB (x16)
+Load Average: 2.60, 1.64, 1.02
+---------------------------------------------------------------
+Benchmark                     Time             CPU   Iterations
+---------------------------------------------------------------
+RefCreation               0.000 ns        0.000 ns   1000000000
+StaticI32Add2_Ref          1.40 ns         1.40 ns    357196200
+NonStaticI32Add3_Ref       1.73 ns         1.73 ns    404634721
+NonStaticF32Add2_Ref       1.73 ns         1.73 ns    405202429
+NonStaticF64Add2_Ref       1.73 ns         1.73 ns    405354713
+NonStaticI64Add2_Ref       1.72 ns         1.72 ns    407806096
+NonStaticI32Set_Ref        1.75 ns         1.75 ns    400254308
+NonStaticI32Get_Ref        1.75 ns         1.75 ns    403759052
+WrapperCreation           29901 ns        29841 ns        23489
+StaticI32Add2             26844 ns        26784 ns        25262
+NonStaticI32Add3          28723 ns        28636 ns        21997
+NonStaticF32Add2          29978 ns        29908 ns        24101
+NonStaticF64Add2          28646 ns        28572 ns        23113
+NonStaticI64Add2          29239 ns        29155 ns        23694
+NonStaticI32Set           29630 ns        29544 ns        23541
+NonStaticI32Get           29037 ns        28956 ns        23249
+```
