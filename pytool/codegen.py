@@ -6,25 +6,27 @@
 import os
 
 type_map = {
-        'V' : 'void',
-        'I' : 'int32_t',
-        'J' : 'int64_t',
-        'F' : 'float',
-        'D' : 'double',
-        }
+    'V': 'void',
+    'I': 'int32_t',
+    'J': 'int64_t',
+    'F': 'float',
+    'D': 'double',
+}
 unpack_map = {
-        'I' : 'i32',
-        'J' : 'i64',
-        'F' : 'f32',
-        'D' : 'f64',
-        }
+    'I': 'i32',
+    'J': 'i64',
+    'F': 'f32',
+    'D': 'f64',
+}
 
 max_arg_len = 0
+
 
 def codegen(desc, name):
     name, _ = os.path.splitext(name)
     generateBody(desc, name)
     generateHeader(desc, name)
+
 
 def generateHeader(desc, class_name):
     (_, _, methods) = desc
@@ -65,7 +67,7 @@ def generateHeader(desc, class_name):
                 has_static_method = True
                 flag = 'static '
             return '{}{}'.format(flag, type_map[retype[0]])
-        
+
         def unpackParams(params):
             real_types = []
             for ch in params:
@@ -84,12 +86,12 @@ def generateHeader(desc, class_name):
         if has_static_method:
             emitStaticInstance(f)
 
-
     with open(class_name + '.h', 'w') as target:
         emitHead(target)
         emitAttributes(target)
         emitMethods(target)
         emitTail(target)
+
 
 def generateBody(desc, class_name):
     (_, _, methods) = desc
@@ -131,7 +133,7 @@ def generateBody(desc, class_name):
                 f.write('\tWrapArg({}, args, {});\n'.format(arg, arg_pos))
                 arg_pos += 1
             f.write('\t{}InvokeMethod(\"{}\", args, {}, {});\n'.format(
-                'staticInstance().' if is_static else '', 
+                'staticInstance().' if is_static else '',
                 method_name,
                 0 if method_retype == 'V' else 1,
                 arg_len))
@@ -150,4 +152,3 @@ def generateBody(desc, class_name):
         emitHeaders(target)
         emitMethods(target)
         emitStaticMemberDefinition(target)
-
