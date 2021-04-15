@@ -31,5 +31,14 @@ public class HelloWorld {
         return 0;
       return a + recursive_sum(a - 1);
     }
+
+    public int loop_sum(int a) {
+      int sum = 0;
+      while(a>0) {
+        sum += a;
+        a -= 1;
+      }
+      return sum;
+    }
 }
 

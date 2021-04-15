@@ -17,10 +17,12 @@ const char *PRINT_GREEN = "\033[92m";
 const char *PRINT_RESET = "\033[0m";
 const char *LOG_PREFIX = "[jwbind-test]";
 
-int32_t recursive_sum(int32_t a) {
-  if (a == 0)
-    return 0;
-  return a + recursive_sum(a - 1);
+int32_t acc(int32_t a) {
+    int sum = 0;
+    while(a > 0) {
+        sum += a--;
+    }
+    return sum;
 }
 
 int main() {
@@ -73,7 +75,11 @@ int main() {
       // Since the stack size is set to 8092 default, the recursion level cannot
       // be too large.
       int32_t a = rand() % 20;
-      ASSERT_EQUAL(hello.recursive_sum(a), recursive_sum(a));
+      ASSERT_EQUAL(hello.recursive_sum(a), acc(a));
+    }
+    for (int32_t i = 0; i < 10; ++i) {
+      int32_t a = rand() % 100;
+      ASSERT_EQUAL(hello.loop_sum(a), acc(a));
     }
 
     printf("%s%s All tests passed.%s\n", PRINT_GREEN, LOG_PREFIX, PRINT_RESET);
