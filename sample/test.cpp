@@ -4,7 +4,7 @@
 #include <cmath>
 #include <ctime>
 
-#define ITER_NUM 100
+#define ITER_NUM 10000
 
 #define ASSERT_EQUAL(a, b) do { \
     if((a) == (b)) break; \
@@ -13,9 +13,14 @@
     exit(EXIT_FAILURE); \
 } while (0);
 
+const char *PRINT_GREEN = "\033[92m";
+const char *PRINT_RESET = "\033[0m";
+const char *LOG_PREFIX = "[jwbind-test]";
+
 int main() {
     HelloWorld hello;
-    printf("\n\n[jwbind basic tests]\tstart testing...\n");
+    printf("\n\n%s%s Start testing...%s\n", PRINT_GREEN, LOG_PREFIX,
+           PRINT_RESET);
     srand(time(0));
 
     for(int32_t i = 0; i < ITER_NUM; ++i) {
@@ -55,7 +60,7 @@ int main() {
         ASSERT_EQUAL(hello.getn(), a);
     }
 
-    printf("[jwbind basic tests]\tall tests passed.\n");
-    
+    printf("%s%s All tests passed.%s\n", PRINT_GREEN, LOG_PREFIX, PRINT_RESET);
+
     return 0;
 }

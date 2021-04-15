@@ -25,7 +25,7 @@ make benchmark	# run benchmark
 
 * JWebAssembly
 * Wasm-micro-runtime
-* binaryen
+* Binaryen
 
 ## Overview
 
@@ -65,4 +65,8 @@ public:
 	}
 };
 ```
+
+### Benchmark
+
+Although jwbind wrapper classes suffer terrible performance, there are still a benchmark record and optimization attempts [here](./cpp/benchmark/README.md).
 

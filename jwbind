@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# jwbind is the entry script to drive the whole tool chain to transpile
+# This file is the entry script to drive the whole tool chain to transpile
 # out target java source file.
 
 if [ -z "$PYTHON" ]; then

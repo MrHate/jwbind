@@ -19,10 +19,12 @@ unpack_map = {
         'D' : 'f64',
         }
 
+max_arg_len = 0
+
 def codegen(desc, name):
     name, _ = os.path.splitext(name)
-    generateHeader(desc, name)
     generateBody(desc, name)
+    generateHeader(desc, name)
 
 def generateHeader(desc, class_name):
     (_, _, methods) = desc
@@ -32,7 +34,9 @@ def generateHeader(desc, class_name):
     def emitHead(f):
         f.write('#include \"{}\"\n\n'.format(wrapper_header))
         f.write('class {} : public {} {{\n'.format(class_name, wrapper_class))
+        f.write('static ArgVec args;\n')
         f.write('public:\n')
+        global max_arg_len
         f.write('\t{}(): {}(\"{}\") {{}}\n'.format(
             class_name,
             wrapper_class,
@@ -118,19 +122,32 @@ def generateBody(desc, class_name):
                 type_map[method_retype],
                 '{}::{}'.format(class_name, method_name),
                 unpackParams(method_params)))
-            f.write('\tArgVec args;\n')
+            # f.write('\tArgVec args({});\n'.format(len(arg_names)))
+            arg_pos = 0
+            global max_arg_len
+            arg_len = len(arg_names)
+            max_arg_len = max(arg_len, max_arg_len)
             for arg in arg_names:
-                f.write('\targs.push_back(WrapArg({}));\n'.format(arg))
-            f.write('\t{}InvokeMethod(\"{}\", args, {});\n'.format(
+                f.write('\tWrapArg({}, args, {});\n'.format(arg, arg_pos))
+                arg_pos += 1
+            f.write('\t{}InvokeMethod(\"{}\", args, {}, {});\n'.format(
                 'staticInstance().' if is_static else '', 
                 method_name,
-                0 if method_retype == 'V' else 1))
+                0 if method_retype == 'V' else 1,
+                arg_len))
             if method_retype != 'V':
                 f.write('\treturn args[0].of.{};\n'.format(
                     unpack_map[method_retype]))
             f.write('}\n\n')
 
+    def emitStaticMemberDefinition(f):
+        f.write('SimpleWrapper::ArgVec {}::args({});\n'.format(
+            class_name,
+            max_arg_len
+        ))
+
     with open(class_name + '.cpp', 'w') as target:
         emitHeaders(target)
         emitMethods(target)
+        emitStaticMemberDefinition(target)
 
