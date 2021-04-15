@@ -2,13 +2,9 @@ public class HelloWorld {
 
     private int n = 18;
 
-    public static int add2(int a, int b) {
-      return a+ b;
-    }
+    public static int add2(int a, int b) { return a + b; }
 
-    public int add3(int a, int b, int c) {
-      return a+b+c;
-    }
+    public int add3(int a, int b, int c) { return a + b + c; }
 
     public float fadd2(float a, float b) {
       return a + b;
@@ -28,6 +24,12 @@ public class HelloWorld {
 
     public void setn(int a) {
       n = a;
+    }
+
+    public int recursive_sum(int a) {
+      if (a == 0)
+        return 0;
+      return a + recursive_sum(a - 1);
     }
 }
 
