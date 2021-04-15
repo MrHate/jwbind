@@ -42,12 +42,15 @@ The back-end part parses the Wasm module with binaryen to extract the class desc
 ### Client view
 ![client-view](http://assets.processon.com/chart_image/5ffed9cfe401fd661a3d2542.png)
 
+Jwbind wraps each instance of the target class with one Wasm instance supported by WAMR. The jwbind back-end part can process any programming language compiled to Wasm with proper jwbind class description due to such design.
+
 One of the jwbind output files is the class header. As shown below, it hides as much as possible implementation details behind the wrapper. Run `make test && cd out`, and you'll find it.
 
 ```c++
 #include "simple.h"
 
 class HelloWorld : public SimpleWrapper {
+static ArgVec args;
 public:
 	HelloWorld(): SimpleWrapper("HelloWorld.wasm") {}
 
@@ -58,13 +61,20 @@ public:
 	int64_t ladd2(int64_t, int64_t);
 	int32_t getn();
 	void setn(int32_t);
+	int32_t recursive_sum(int32_t);
+	int32_t loop_sum(int32_t);
 
 	static HelloWorld& staticInstance() {
 		static HelloWorld _inst;
 		return _inst;
 	}
 };
+
 ```
+
+### Class description
+
+The class description is quite simple, consisting of continuous function description entries within a custom section called "SaNA." Each description entry consists of two parts, the length of the following string in [LEB128](https://en.wikipedia.org/wiki/LEB128) unsigned integer and the function signature string. For example, given Java method `int add2(int a, int b)`, jwbind will record it as "add2(II)I", the same as javac parses Java methods.
 
 ### Benchmark
 
