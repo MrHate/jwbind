@@ -31,6 +31,9 @@ int main() {
            PRINT_RESET);
     srand(time(0));
 
+    // Check default value.
+    ASSERT_EQUAL(hello.getn(), 18);
+
     // Basic addition test cases under different argument types.
     for(int32_t i = 0; i < ITER_NUM; ++i) {
         int32_t a = rand() % 10000,
