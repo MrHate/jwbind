@@ -6,7 +6,11 @@ default: deploy
 deploy: download-submmodules build-jwasm build-cpp-tools
 
 download-submmodules:
-	git submodule update --init
+	git submodule update --init -- java/jwasm
+	git submodule update --init -- java/jwasm-api
+	git submodule update --init -- java/jwasm-gradle
+	git submodule update --init -- cpp/binaryen
+	git submodule update --init -- cpp/wamr
 
 build-jwasm: build-jwasm-api build-jwasm-gradle
 	cd java/jwasm && gradle publishToMavenLocal
@@ -37,6 +41,7 @@ test:: clean deploy
 	cd out && make -j && ./a.out
 
 benchmark:: test
+	git submodule update --init -- cpp/benchmark/googlebenchmark
 	cp -r out cpp/benchmark/
 	cd cpp/benchmark && rm -rf build && mkdir build && cd build && cmake .. && make -j
 	cd cpp/benchmark/out && ../build/jwbind-benchmark 

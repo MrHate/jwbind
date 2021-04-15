@@ -99,8 +99,7 @@ void SimpleWrapper::InvokeMethod(const char *func_name,
     args[i] = results[i];
 }
 
-// ======================= Arg wrapping template functions
-// ========================
+// ========= Arg wrapping template functions =========
 
 template <typename T>
 void SimpleWrapper::WrapArg(T arg, ArgVec &vec, uint32_t i) {}
