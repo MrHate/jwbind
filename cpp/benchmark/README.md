@@ -105,6 +105,8 @@ NonStaticI32Get           31564 ns        31479 ns        23526
 Each arg wrapper function previously triggers one std::vector construction and n*2 wasm_val_t constructions along with correlated destructions.
 Such stuff could be eliminated by moving arg vector into member-static and adjusting arg value directly on arg vector passing by reference.
 
+However, several C++ copy elision optimizations might have already addressed such problem.
+
 ```
 Run on (16 X 2100 MHz CPU s)
 CPU Caches:
