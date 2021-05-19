@@ -3,6 +3,12 @@
 # This file is the entry script to drive the whole tool chain to transpile
 # out target java source file.
 
+create_timestamp() {
+  echo '('`date +"%s.%N"` ' * 1000000)/1' | bc
+}
+
+# Phase 0: Environment check.
+
 if [ -z "$PYTHON" ]; then
   PYTHON=$(which python3 2> /dev/null)
 fi
@@ -22,6 +28,10 @@ JAVA_SRC_DIR=$JAVA_COM_DIR/src
 JAVA_DIST_DIR=$JAVA_COM_DIR/build/distributions
 TARGET_NAME=$(basename "$1" ".java")
 
+# Phase 1: Compile Java source file with JWasm.
+
+TS_FRONTEND_BEGIN=$(create_timestamp)
+
 if [ ! -d "$JAVA_SRC_DIR" ]; then
   mkdir -p $JAVA_SRC_DIR
 fi
@@ -37,6 +47,10 @@ if [ $? -ne 0 ]; then
 fi
 
 cp "$JAVA_DIST_DIR/$TARGET_NAME.wasm" .
+
+# Phase 2: Generate C++ from Wasm.
+
+TS_BACKEND_BEGIN=$(create_timestamp)
 
 JWBIND_BUILD_DIR=.jwbind
 
@@ -73,6 +87,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Move output files into target directory.
+
 OUTPUT_DIR=out
 WAMR_DIR=cpp/wamr/core/iwasm
 
@@ -87,3 +102,9 @@ mv $TARGET_NAME.* $OUTPUT_DIR
 mv $CPP_BUILD_DIR/libvmlib.a $OUTPUT_DIR
 mv $CPP_BUILD_DIR/simple.h $OUTPUT_DIR
 cp $WAMR_DIR/include/* $OUTPUT_DIR
+
+TS_JWBIND_END=$(create_timestamp)
+echo '\nProcessing time:'
+echo 'Frontend:\t' $(($TS_BACKEND_BEGIN - $TS_FRONTEND_BEGIN)) 'ms'
+echo 'Backend:\t' $(($TS_JWBIND_END - $TS_BACKEND_BEGIN)) 'ms'
+echo 'Total:\t\t' $(($TS_JWBIND_END - $TS_FRONTEND_BEGIN)) 'ms'
