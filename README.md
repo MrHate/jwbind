@@ -31,8 +31,6 @@ make benchmark	# run benchmark
 
 ### Transpilation workflow
 
-![arch](http://assets.processon.com/chart_image/6076775d0791293688822148.png)
-
 The jwbind toolchain consists of a front-end and a back-end. 
 
 The front-end part modifies the Java source file with python tools at first as the preprocessing stage to have the source file meet the requirements of JWebAssembly. It then compiles Java source code into Java bytecode by any javac tool. Afterward, it parses the Java bytecode into Wasm binary and necessary jwbind class description data within a custom section by [customized JWebAsssembly](https://github.com/MrHate/JWebAssembly).
@@ -40,7 +38,6 @@ The front-end part modifies the Java source file with python tools at first as t
 The back-end part parses the Wasm module with binaryen to extract the class description data. Finally, the jwbind python tools would generate target wrapper source files and build the target archive/library file with the WAMR library altogether.
 
 ### Client view
-![client-view](http://assets.processon.com/chart_image/5ffed9cfe401fd661a3d2542.png)
 
 Jwbind wraps each instance of the target class with one Wasm instance supported by WAMR. The jwbind back-end part can process any programming language compiled to Wasm with proper jwbind class description due to such design.
 
