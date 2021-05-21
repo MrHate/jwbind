@@ -6,6 +6,7 @@
 create_timestamp() {
   echo '('`date +"%s.%N"` ' * 1000000)/1' | bc
 }
+TS_FRONTEND_BEGIN=$(create_timestamp)
 
 # Phase 0: Environment check.
 
@@ -30,7 +31,6 @@ TARGET_NAME=$(basename "$1" ".java")
 
 # Phase 1: Compile Java source file with JWasm.
 
-TS_FRONTEND_BEGIN=$(create_timestamp)
 
 if [ ! -d "$JAVA_SRC_DIR" ]; then
   mkdir -p $JAVA_SRC_DIR
@@ -39,13 +39,13 @@ fi
 echo "rootProject.name = '$TARGET_NAME'" > $JAVA_COM_DIR/settings.gradle
 rm -rf $JAVA_SRC_DIR/*
 (exec "$PYTHON" "pytool/jparser.py" $1) > $JAVA_SRC_DIR/$TARGET_NAME.java
+TS_AFTER_PREPROCESS=$(create_timestamp)
 # cp $@ $JAVA_SRC_DIR
 (cd $JAVA_COM_DIR && make)
 if [ $? -ne 0 ]; then
   echo 'JWebAssembly compilation failed.'
   exit 1
 fi
-
 cp "$JAVA_DIST_DIR/$TARGET_NAME.wasm" .
 
 # Phase 2: Generate C++ from Wasm.
@@ -67,6 +67,8 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+TS_AFTER_CODEGEN=$(create_timestamp)
+
 mv $TARGET_NAME.cpp $CPP_BUILD_DIR
 if [ $? -ne 0 ]; then
   echo "cannot find $TARGET_NAME.cpp."
@@ -80,7 +82,7 @@ fi
 
 echo "add_library($TARGET_NAME $TARGET_NAME.cpp simple.cpp ${UNCOMMON_SHARED_SOURCE})" >> $CPP_BUILD_DIR/CMakeLists.txt
 echo "target_link_libraries ($TARGET_NAME vmlib -lpthread)" >> $CPP_BUILD_DIR/CMakeLists.txt
-(cd $CPP_BUILD_DIR && cmake . && make)
+(cd $CPP_BUILD_DIR && cmake . && make -j)
 if [ $? -ne 0 ]; then
   echo 'cpp template generating failed with cmake.'
   exit 1
@@ -105,6 +107,10 @@ cp $WAMR_DIR/include/* $OUTPUT_DIR
 
 TS_JWBIND_END=$(create_timestamp)
 echo '\nProcessing time:'
-echo 'Frontend:\t' $(($TS_BACKEND_BEGIN - $TS_FRONTEND_BEGIN)) 'ms'
-echo 'Backend:\t' $(($TS_JWBIND_END - $TS_BACKEND_BEGIN)) 'ms'
-echo 'Total:\t\t' $(($TS_JWBIND_END - $TS_FRONTEND_BEGIN)) 'ms'
+echo 'Preprocess:\t\t' $(($TS_AFTER_PREPROCESS - $TS_FRONTEND_BEGIN)) 'ms'
+echo 'Front Compilation:\t' $(($TS_BACKEND_BEGIN - $TS_AFTER_PREPROCESS)) 'ms'
+echo 'Frontend:\t\t' $(($TS_BACKEND_BEGIN - $TS_FRONTEND_BEGIN)) 'ms'
+echo 'Codegen:\t\t' $(($TS_AFTER_CODEGEN - $TS_BACKEND_BEGIN)) 'ms'
+echo 'Back Compilation:\t' $((TS_JWBIND_END - $TS_AFTER_CODEGEN)) 'ms'
+echo 'Backend:\t\t' $(($TS_JWBIND_END - $TS_BACKEND_BEGIN)) 'ms'
+echo 'Total:\t\t\t' $(($TS_JWBIND_END - $TS_FRONTEND_BEGIN)) 'ms'
